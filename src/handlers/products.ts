@@ -2,11 +2,7 @@ import express, { Request, Response } from 'express'
 import {Product,ProductsModel} from '../models/products';
 import verifyAuthToken from '../middlewares/verifyAuthentication';
 
-const productsRoutes = (app: express.Application) => {
-    app.get('/products', index)
-    app.get('/products/{:id}', show)
-    app.post('/products', verifyAuthToken, create)
- }
+
 
 const products = new ProductsModel();
 
@@ -57,4 +53,10 @@ const create = async (req:Request, res:Response) => {
         .send(`cannot create this product ${name}`)
     };
 };
+
+const productsRoutes = (app: express.Application) => {
+    app.get('/products',verifyAuthToken, index)
+    app.get('/products/:id', show)
+    app.post('/products', verifyAuthToken, create)
+ }
   export default productsRoutes;

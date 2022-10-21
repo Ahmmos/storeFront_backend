@@ -5,9 +5,9 @@ import verifyAuthToken from '../middlewares/verifyAuthentication';
 
 const userRoutes = (app: express.Application) => {
    app.get('/users', verifyAuthToken, index)
-   app.get('/users/{:id}', verifyAuthToken,show)
+   app.get('/users/:id', show)
    app.post('/users', createNew)
-   app.delete('/users/{:id}',destroy)
+   app.delete('/users/:id',destroy)
    app.post('/users/authenticate', authenticate)
 };
 
@@ -29,14 +29,15 @@ const index = async (_req: Request, res: Response) => {
   
   const show = async (req: Request, res: Response) => {
 
-   try { const specificUser = await users.show(req.body.id);
-      res.json(specificUser);
-      
+   try { 
+      const specificUser = await users.show(req.body.id)
+      res.json(specificUser)
+      verifyAuthToken
    } catch (error) {
       res.status(400)
       .send(`cannot reach this user, ${error}`)
    }
-    
+   
   };
 
 const createNew = async (req:Request, res: Response)=>{
@@ -61,19 +62,8 @@ const createNew = async (req:Request, res: Response)=>{
 };
 
 const destroy = async (req: Request, res: Response) => {
-   try {
-      
-     const authorizationHeader = req.headers.authorization
-     if(authorizationHeader){
-      const token = authorizationHeader.split(' ')[1]
-      jwt.verify(token, secretToken)
-     }
- } catch(err) {
-     res.status(401)
-     res.json('Access denied, invalid token')
-     return
- };
-     const deleted = await users.delete(req.body.id)
+   const id = Number (req.body.id) 
+     const deleted = await users.delete(id)
      res.json(deleted)
  };
 
