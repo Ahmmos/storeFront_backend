@@ -13,15 +13,15 @@ This repo contains all APIs and CRUD operation for storefront backend.
 
 ## ENV variables
 
-DB_HOST=localhost
-DB_NAME=postgres
-DB_USER=postgres
-DB_PASSWORD= "your password"
-BCRYBT_PASSWORD =peppermakesfoodsbetter
-SALT_ROUNDES = 10
-TEST_DB_NAME=ground_database
-TOKEN_SECRET=nevergiveup
-ENV=dev
+- DB_HOST=localhost
+- DB_NAME=postgres
+- DB_USER=postgres
+- DB_PASSWORD= "your password"
+- BCRYBT_PASSWORD =peppermakesfoodsbetter
+- SALT_ROUNDES = 10
+- TEST_DB_NAME=ground_database
+- TOKEN_SECRET=nevergiveup
+- ENV=dev
 
 ## Token
 it will be created with creation of new user route or authenticate route you will find it in the header tab in postman so you need to copy and paste it to the authorization tab to make all CRUD functions needs an authorization before done.
