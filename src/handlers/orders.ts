@@ -6,7 +6,7 @@ import verifyAuthToken from "../middlewares/verifyAuthentication";
 
 const ordersRoutes = (app: express.Application) => {
     app.get('/orders', index)
-    app.get('/orders/{:id}',verifyAuthToken, completedOrder)
+    app.get('/orders/completedOrder',verifyAuthToken, completedOrder)
     app.post('/orders', verifyAuthToken, create)
     app.delete('/orders', verifyAuthToken ,destroy)
  }
@@ -46,9 +46,8 @@ const create = async (req:Request, res:Response) => {
 
 const completedOrder = async (req:Request, res:Response) => {
     
-    const {user_id} =req.body;
     try {
-        const finishedOrder = await  orders.CompletedOrders(user_id);
+        const finishedOrder = await  orders.CompletedOrders(Number(req.user?.id));
         res.json(finishedOrder);
     } catch (error) {
         res.status(400)
@@ -60,7 +59,7 @@ const completedOrder = async (req:Request, res:Response) => {
 
 const destroy = async (req:Request, res:Response) => {
     
-    const {id} =req.body.id;
+    const id =req.params.id;
     try {
         const deletedOrder = await  orders.deleteOrder(id);
         res.json(deletedOrder);

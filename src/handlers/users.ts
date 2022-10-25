@@ -1,46 +1,47 @@
-import express,{ Request, Response } from 'express'
+import express,{ NextFunction, Request, Response } from 'express'
 import {User,UserModel} from '../models/users';
 import jwt from 'jsonwebtoken';
 import verifyAuthToken from '../middlewares/verifyAuthentication';
 
 const userRoutes = (app: express.Application) => {
    app.get('/users', verifyAuthToken, index)
-   app.get('/users/:id', show)
+   app.get('/users/:id',verifyAuthToken, show)
    app.post('/users', createNew)
-   app.delete('/users/:id',destroy)
+   app.delete('/users/:id',verifyAuthToken,destroy)
+   app.put('/users', verifyAuthToken, update)
    app.post('/users/authenticate', authenticate)
 };
 
 const secretToken = process.env.TOKEN_SECRET as string;
 const users = new UserModel();
 
-const index = async (_req: Request, res: Response) => {
+
+const index = async (_req: Request, res: Response , next: NextFunction) => {
 
  try {
    const allUsers = await users.index();
    res.json(allUsers);
   } catch (error) {
-   res.status(400)
-   .send(`cannot reach users, ${error}`)
+        next(error)
 }
 
   
   };
   
-  const show = async (req: Request, res: Response) => {
+  const show = async (req: Request, res: Response, next: NextFunction) => {
 
-   try { 
-      const specificUser = await users.show(req.body.id)
-      res.json(specificUser)
-      verifyAuthToken
+   try {
+      const intId = Number(req.params.id)
+      const specificUser = await users.show(intId)
+      res.status(200)
+      .json(specificUser)
    } catch (error) {
-      res.status(400)
-      .send(`cannot reach this user, ${error}`)
+      next(error)
    }
    
   };
 
-const createNew = async (req:Request, res: Response)=>{
+const createNew = async (req:Request, res: Response, next: NextFunction)=>{
    
    const {userName,firstName,lastName,password}=req.body;
    const user:User ={userName,firstName,lastName,password};
@@ -55,19 +56,50 @@ const createNew = async (req:Request, res: Response)=>{
       const token = jwt.sign({ user: newUser }, secretToken);
       res.send(token);
    } catch (error) {
-      res.status(400)
-      res.json(error)
+     next(error)
    };
   
 };
 
-const destroy = async (req: Request, res: Response) => {
-   const id = Number (req.body.id) 
-     const deleted = await users.delete(id)
-     res.json(deleted)
+const destroy = async (req: Request, res: Response, next: NextFunction) => {
+   try {
+      const id = Number (req.params.id) 
+      const deleted = await users.delete(id)
+      res.json(deleted)
+   } catch (error) {
+      next(error)
+   };
  };
 
-const authenticate= async (req:Request, res:Response) => {
+
+const update =async (req:Request, res: Response, next: NextFunction)=>{
+
+   try {
+     
+      const { id, userName,firstName,lastName,password } = req.body;
+      if (!userName || !firstName || !password || !lastName) {
+         return res
+          .status(400)
+          .send(
+            'Error, missing or malformed parameters. userName,firstName,lastName,password required'
+          );
+      }
+      const user:User ={id,userName,firstName,lastName,password};
+      const updatedUser= await users.update(user);
+      res.json({
+         status: 'success',
+         data: updatedUser,
+         message: 'User updated successfully',
+      });
+   } catch (error) {
+     next(error)
+   };
+  
+};
+
+
+
+const authenticate= async (req:Request, res:Response , next: NextFunction) => {
    const {userName,password}=req.body;
    try {
       const u = await users.authenticate(userName,password);
@@ -77,8 +109,7 @@ const authenticate= async (req:Request, res:Response) => {
       }
 
    } catch (error) {
-      res.status(401)
-      res.json(error)
+  next(error)
    }
 };
   

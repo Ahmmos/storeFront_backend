@@ -42,15 +42,15 @@ export class OrderModel {
 
 
 
-async CompletedOrders(user_id:number): Promise<Order[]> {
+async CompletedOrders(user_id: Number): Promise<Order[]> {
     try {
         const conn = await client.connect();
-        const sql = 'SELECT * FROM Orders WHERE User_id=($1) AND status=($2)';
-        const result = await conn.query(sql, [user_id]);
+        const sql = 'SELECT * FROM Orders WHERE User_id=($1) AND status=complete';
+        const result = await conn.query(sql);
         conn.release();
         return result.rows;
     } catch (err) {
-        throw new Error(`ther is no completed order for this ${user_id}, ${(err as Error).message}`);
+        throw new Error(`ther is no completed order for this, ${(err as Error).message}`);
     };
 };
 

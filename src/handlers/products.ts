@@ -22,7 +22,7 @@ const index =async (_req:Request, res:Response) => {
 
 const show = async (req:Request, res:Response) => {
     
-    const {id} =req.body.id;
+    const id = Number (req.params.id);
     try {
         const singleProduct = await  products.show(id);
         res.json(singleProduct);

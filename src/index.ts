@@ -33,12 +33,12 @@ app.get('/',  (req: Request, res: Response)=> {
 });
 
 //middleware to handle all errors throw the whole requests
-app.use(errorMiddleware)
 
 userRoutes(app);
 productsRoutes(app);
 ordersRoutes(app);
 productsOrderRoutes(app);
+app.use(errorMiddleware)
 
 //start express server
 app.listen(3000, function () {

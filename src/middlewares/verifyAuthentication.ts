@@ -1,14 +1,17 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
+                                                                                                                                                                                                                    
 
 const verifyAuthToken = (req: Request, res: Response, next:NextFunction) => {
     try {
         const authorizationHeader = req.headers.authorization
         if(authorizationHeader){
             const token = authorizationHeader.split(' ')[1]
-            const decoded = jwt.verify(token, process.env.TOKEN_SECRET as string)
+            const decoded = jwt.verify(token, process.env.TOKEN_SECRET as string) as JwtPayload
+            
         if (decoded) {
-        next()
+         req.user = decoded.user
+         next()
         }else {
          throw new Error('cannot login Please Try Again')
               };

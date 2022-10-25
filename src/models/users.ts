@@ -34,10 +34,10 @@ export class UserModel {
             const conn = await client.connect()
             const result = await conn.query(sql, [id])
             conn.release()
-            console.log(result.rows[0])
+            if (!result.rows.length) throw new Error;
             return result.rows[0]
         } catch (err) {
-            throw new Error(`Could not find User ${id}, Error: ${(err as Error).message}`);
+            throw new Error(`Could not find User with this ${id}, Error: ${(err as Error).message}`);
         };
     };
 
@@ -71,7 +71,22 @@ export class UserModel {
         };
       };
 
-
+    async update (u:User): Promise<User> {
+        try {
+            const conn = await client.connect();
+            const sql = 
+    'UPDATE users SET username=($1), firstname=($2), lastname=($3), password=($4) WHERE id=($5) RETURNING id, userName, firstname, lastName';
+            const hash = bcrypt.hashSync(u.password as string + PEPPER, Number(SALT_ROUNDES));
+            const result = await conn.query(sql ,[u.userName,u.firstName,u.lastName,hash,u.id])
+            conn.release();
+            return result.rows[0];
+ 
+        } catch (error) {
+            throw new Error(
+                `Could not update user: ${u.userName}, ${(error as Error).message}`
+              )
+        }  
+    }
 
     async authenticate(username: string, password: string): Promise<User | null> {
         try {

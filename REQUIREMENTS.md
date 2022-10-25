@@ -27,7 +27,9 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 - Create [No token required]: to create a new user make a post request to http://localhost:3000/users and provide four things (userName,firstName, lastName, password) of the user in the request body. finally, you will recieve a token for some other CRUD functions.
 
--Authenticatation: to authenticate a user make a post request to http://localhost:3000/authenticate and provide (userName, password) of the user in the request body. finally, if the data mathes a user it will be returned.
+- Update [token required]: to update a specific user make a put request to http://localhost:3000/users and provide five things (id,userName,firstName, lastName, password) of the user you want to update in the request body and you will recieve success with updated info or failed message.
+
+- Authenticatation: to authenticate a user make a post request to http://localhost:3000/authenticate and provide (userName, password) of the user in the request body. finally, if the data mathes a user it will be returned.
 
 #### Orders
 
