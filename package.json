@@ -10,7 +10,7 @@
     "lint": "eslint src/*.ts",
     "lint:fix": "eslint --fix",
     "format": "prettier --write 'src/**/*.ts'",
-    "test": "tsc && jasmine"
+    "test": "set ENV=test && db-migrate -e test up && npx tsc && jasmine && db-migrate -e test reset"
   },
   "license": "MIT",
   "devDependencies": {
