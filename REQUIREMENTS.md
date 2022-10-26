@@ -17,6 +17,10 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 - Create [token required]: to create a new product make a post request to http://localhost:3000/products and provide three things (name, price, category) of the product in the request body
 
+- [OPTIONAL] Top 5 most popular products: to get the top five most popular products make a get request to http://localhost:3000/products/top/top5 and you will get the top 5 products by its product_id.
+
+- [OPTIONAL] Products by category (args: product category): to get the products categorized by a specific category just make a get request to http://localhost:3000/products/cat/"your_category" replace "your_category" with your desired category and you will get all products under this category
+
 #### Users
 
 - Base Url (http://localhost:3000/users)
