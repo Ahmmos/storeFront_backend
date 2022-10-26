@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express, { Request, Response , NextFunction} from 'express'
 import {Product,ProductsModel} from '../models/products';
 import verifyAuthToken from '../middlewares/verifyAuthentication';
 
@@ -7,35 +7,33 @@ import verifyAuthToken from '../middlewares/verifyAuthentication';
 const products = new ProductsModel();
 
 
-const index =async (_req:Request, res:Response) => {
+const index =async (_req:Request, res:Response , next: NextFunction) => {
     try {
         const AllProducts= await products.index();
         res.json(AllProducts)
     } catch (error) {
-        res.status(400)
-        .send(`cannot get the products check your connection, ${error}`)
+      next(error)
     }
   
 };
 
 
 
-const show = async (req:Request, res:Response) => {
+const show = async (req:Request, res:Response , next: NextFunction) => {
     
     const id = Number (req.params.id);
     try {
         const singleProduct = await  products.show(id);
         res.json(singleProduct);
     } catch (error) {
-        res.status(400)
-        .send(`cannot get this product`)
+        next(error)
     };
 };
 
 
 
 
-const create = async (req:Request, res:Response) => {
+const create = async (req:Request, res:Response , next: NextFunction) => {
     
       const {name,price,category}=req.body;
    
@@ -49,14 +47,25 @@ const create = async (req:Request, res:Response) => {
         const newProduct = await  products.create(product);
         res.json(newProduct);
     } catch (error) {
-        res.status(400)
-        .send(`cannot create this product ${name}`)
+        next(error)
     };
+};
+    const productByCategory = async (req:Request, res:Response , next: NextFunction) => {
+    console.log(req.params)
+        const category = req.params.category;
+        try {
+            const SameproductsType = await  products.productByCategory(category);
+            res.json(SameproductsType);
+        } catch (error) {
+            next(error)
+        };
 };
 
 const productsRoutes = (app: express.Application) => {
     app.get('/products',verifyAuthToken, index)
     app.get('/products/:id', show)
     app.post('/products', verifyAuthToken, create)
+    app.get('/products/cat/:category', productByCategory)
  }
-  export default productsRoutes;
+  
+ export default productsRoutes;

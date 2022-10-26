@@ -51,7 +51,21 @@ export class ProductsModel {
         };
     };
 
+    async productByCategory(category: string): Promise<Product[]> {
+        try {
+            const sql = 'SELECT * FROM products WHERE category=($1)';
+            const conn = await client.connect();
+            const result = await conn.query(sql, [category]);
+            conn.release();
+            return result.rows;
+        } catch (error) {
+            throw new Error(
+                `there in no products in category with name: ${category}. Error: ${(error as Error).message}`
+            );
+        };
+    };
 };  
+
 
 
 
