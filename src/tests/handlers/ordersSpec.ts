@@ -8,7 +8,7 @@ const request = supertest(app);
 describe('Testing Endpoint: /orders', () => {
     const order: Order = {
         status:"Active",
-        user_id:"1"
+        user_id:1
     };
     let token: string;
     let userId: string;
