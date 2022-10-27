@@ -81,3 +81,33 @@ once the server is started you are connected to the databse
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+## Database schemas
+
+### users table
+
+id SERIAL PRIMARY KEY,
+userName VARCHAR(50) NOT NULL,
+firstName VARCHAR(50) NOT NULL,
+lastName VARCHAR(50) NOT NULL,
+password VARCHAR(255) NOT NULL
+
+### orders table
+
+id SERIAL PRIMARY KEY,
+status VARCHAR(15),
+user_id integer NOT NULL REFERENCES users(id)
+
+### products table
+
+id SERIAL PRIMARY KEY,
+name VARCHAR(50) NOT NULL,
+price INTEGER NOT NULL,
+category VARCHAR(50) NOT NULL
+
+### products_ordes table
+
+id SERIAL PRIMARY KEY,
+quantity integer,
+product_id bigint NOT NULL REFERENCES products(id),
+order_id bigint NOT NULL REFERENCES orders(id)

@@ -78,7 +78,7 @@ const destroy = async (req:Request, res:Response , next : NextFunction) => {
 };
 
 const ordersRoutes = (app: express.Application) => {
-    app.get('/orders', index)
+    app.get('/orders', verifyAuthToken, index)
     app.get('/orders/status/complete',verifyAuthToken, completedOrder)
     app.get('/orders/status/active',verifyAuthToken, currentOrders)
     app.post('/orders', verifyAuthToken, create)
