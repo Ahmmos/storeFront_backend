@@ -47,7 +47,7 @@ describe('User Model', () => {
     
     afterAll(async () => {
       const connection = await client.connect()
-      const sql = 'DELETE FROM users \nALTER SEQUENCE users_id_seq RESTART WITH 1;'
+      const sql = 'DELETE FROM users'
       await connection.query(sql)
       connection.release()
     })

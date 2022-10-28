@@ -9,7 +9,7 @@ const userModel = new UserModel()
 const request = supertest(app)
 let token = ''
 
-describe('Testing the logic of the Products Model END POINTS', () => {
+describe('Products Api end-points', () => {
   const product = {
     name: "Apple",
     price: 25,
@@ -32,9 +32,9 @@ describe('Testing the logic of the Products Model END POINTS', () => {
 
   afterAll(async () => {
     const connection = await client.connect()
-    const sql1 = 'DELETE FROM users \nALTER SEQUENCE users_id_seq RESTART WITH 1;'
+    const sql1 = 'DELETE FROM users'
     await connection.query(sql1)
-    const sql = 'DELETE FROM products \nALTER SEQUENCE products_id_seq RESTART WITH 1;'
+    const sql = 'DELETE FROM products'
     await connection.query(sql)
     connection.release()
   })

@@ -4,8 +4,6 @@ import { User , UserModel } from '../../models/users';
 import client from '../../database'
 
 const userModel = new UserModel()
-
-
 const request = supertest(app)
 let token = ''
 
@@ -24,7 +22,7 @@ describe('User Api end-point', () => {
 
   afterAll(async () => {
     const connection = await client.connect()
-    const sql = `DELETE FROM users \nALTER SEQUENCE users_id_seq RESTART WITH 1`
+    const sql = 'DELETE FROM users'
     await connection.query(sql)
     connection.release()
   })
@@ -33,17 +31,16 @@ describe('User Api end-point', () => {
     it('should be able to authenticate to get token ', async () => {
       const res = await request
         .post('/users/authenticate')
-        .set('Content-type', 'application/json')
         .send({ userName: 'Ahmos', password: 'password123' })
       expect(res.status).toBe(200)
       const {
-        user_id,
+        id,
         userName,
         firstName,
         lastName,
         token: userToken
       } = res.body.data
-      expect(user_id).toBe(user.id)
+      expect(id).toBe(user.id)
       expect(userName).toBe(user.userName)
       expect(firstName).toBe(user.firstName)
       expect(lastName).toBe(user.lastName)

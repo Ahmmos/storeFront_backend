@@ -3,7 +3,7 @@ import client from '../../database';
 
 const productModel = new ProductsModel();
 
-describe('User Model', () => {
+describe('Product Model', () => {
   describe('Test methods exists', () => {
     it('should have an index method', () => {
       expect(productModel.index).toBeDefined()
@@ -26,7 +26,7 @@ describe('User Model', () => {
     })
   })
   
-  describe('Test Order Model Logic', () => {
+  describe('Test Product Model Logic', () => {
     const product: Product = {
       
       name:"testproduct",
@@ -43,7 +43,7 @@ describe('User Model', () => {
     
     afterAll(async () => {
       const connection = await client.connect()
-      const sql = 'DELETE FROM products \nALTER SEQUENCE products_id_seq RESTART WITH 1;'
+      const sql = 'DELETE FROM products'
       await connection.query(sql)
       connection.release()
     })

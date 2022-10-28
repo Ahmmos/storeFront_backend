@@ -4,14 +4,9 @@ import { User,UserModel } from '../../models/users';
 
 const userModel = new UserModel();
 const orderModel = new OrderModel();
-const order: Order = {
-
-    status:"status_test",
-    user_id:1
-};
 
 
-describe('User Model', () => {
+describe('Order Model', () => {
   describe('Test methods exists', () => {
     it('should have an index method', () => {
       expect(orderModel.index).toBeDefined()
@@ -57,9 +52,9 @@ describe('User Model', () => {
     
     afterAll(async () => {
       const connection = await client.connect()
-      const sql = 'DELETE FROM users \nALTER SEQUENCE users_id_seq RESTART WITH 1;'
+      const sql = 'DELETE FROM users'
       await connection.query(sql)
-      const sql2 = 'DELETE FROM orders \nALTER SEQUENCE orders_id_seq RESTART WITH 1;'
+      const sql2 = 'DELETE FROM orders'
       await connection.query(sql2)
       connection.release()
     })
@@ -95,8 +90,8 @@ describe('User Model', () => {
     })
     
     it('Delete One method should delete user from DB', async () => {
-      const deletedUser = await orderModel.deleteOrder(order.id as unknown as string)
-      expect(deletedUser.id).toBe(user.id)
+      const deletedOrder = await orderModel.deleteOrder(order.id as unknown as string)
+      expect(deletedOrder.id).toBe(order.id)
     })
   })
 })

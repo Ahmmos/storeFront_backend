@@ -4,13 +4,14 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && nodemon dist/index.js",
+    "start": "tsc && node dist/index.js",
+    "dev": "nodemon src/index.ts",
     "jasmine": "jasmine",
     "prettier": "prettier --config .prettierrc '*.js' --write",
     "lint": "eslint src/*.ts",
     "lint:fix": "eslint --fix",
     "format": "prettier --write 'src/**/*.ts'",
-    "test":  "set ENV=test && db-migrate up --env test && tsc && jasmine && db-migrate down"
+    "test": "tsc && set ENV=test && db-migrate --env test reset && db-migrate --env test up && jasmine"
 
   },
   "license": "MIT",

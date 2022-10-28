@@ -62,7 +62,6 @@ const productByCategory = async (req:Request, res:Response , next: NextFunction)
 };
 
 const mostPopular = async (_req:Request, res:Response , next: NextFunction) => {
-    console.log(res)
     try {
         const topfive = await  products.mostPopular();
         res.json(topfive);
